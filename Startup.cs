@@ -43,6 +43,10 @@ namespace CPW215_QuarterProject
 
 			// Password strength
 			options.Password.RequiredLength = 8;
+
+			// Lockout options
+			options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+			options.Lockout.MaxFailedAccessAttempts = 5;
         }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
