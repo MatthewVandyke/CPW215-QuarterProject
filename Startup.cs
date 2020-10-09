@@ -30,11 +30,20 @@ namespace CPW215_QuarterProject
 			services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(
 					Configuration.GetConnectionString("DefaultConnection")));
-			services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			services.AddDefaultIdentity<IdentityUser>(SetIdentityOptions)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			services.AddControllersWithViews();
 			services.AddRazorPages();
 		}
+
+		private static void SetIdentityOptions(IdentityOptions options)
+        {
+			// Sign in options
+			options.SignIn.RequireConfirmedEmail = false;
+
+			// Password strength
+			options.Password.RequiredLength = 8;
+        }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
