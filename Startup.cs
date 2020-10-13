@@ -31,23 +31,12 @@ namespace CPW215_QuarterProject
 				options.UseSqlServer(
 					Configuration.GetConnectionString("DefaultConnection")));
 			services.AddDefaultIdentity<IdentityUser>(SetIdentityOptions)
+				.AddRoles<IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			services.AddControllersWithViews();
 			services.AddRazorPages();
 		}
 
-		private static void SetIdentityOptions(IdentityOptions options)
-        {
-			// Sign in options
-			options.SignIn.RequireConfirmedEmail = false;
-
-			// Password strength
-			options.Password.RequiredLength = 8;
-
-			// Lockout options
-			options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-			options.Lockout.MaxFailedAccessAttempts = 5;
-        }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -78,6 +67,39 @@ namespace CPW215_QuarterProject
 					pattern: "{controller=Home}/{action=Index}/{id?}");
 				endpoints.MapRazorPages();
 			});
+
+			// Create roles here
+			IServiceScope serviceProvider = app.ApplicationServices
+									.GetRequiredService<IServiceProvider>().CreateScope();
+			CreateRoles(serviceProvider.ServiceProvider, "Admin", "RegUser").Wait();
+		}
+
+		private static void SetIdentityOptions(IdentityOptions options)
+		{
+			// Sign in options
+			options.SignIn.RequireConfirmedEmail = false;
+
+			// Password strength
+			options.Password.RequiredLength = 8;
+
+			// Lockout options
+			options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+			options.Lockout.MaxFailedAccessAttempts = 5;
+		}
+
+		private static async Task CreateRoles(IServiceProvider provider, params string[] roles)
+		{
+			RoleManager<IdentityRole> roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+
+			// Create role if it does not exist
+			foreach (string role in roles)
+			{
+				bool doesRoleExist = await roleManager.RoleExistsAsync(role);
+				if (!doesRoleExist)
+				{
+					await roleManager.CreateAsync(new IdentityRole(role));
+				}
+			}
 		}
 	}
 }
