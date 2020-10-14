@@ -71,7 +71,8 @@ namespace CPW215_QuarterProject
 			// Create roles here
 			IServiceScope serviceProvider = app.ApplicationServices
 									.GetRequiredService<IServiceProvider>().CreateScope();
-			CreateRoles(serviceProvider.ServiceProvider, "Admin", "RegUser").Wait();
+			CreateRoles(serviceProvider.ServiceProvider, "Admin", "Seller", "RegUser").Wait();
+			CreateDefaultAdmin(serviceProvider.ServiceProvider).Wait();
 		}
 
 		private static void SetIdentityOptions(IdentityOptions options)
@@ -99,6 +100,31 @@ namespace CPW215_QuarterProject
 				{
 					await roleManager.CreateAsync(new IdentityRole(role));
 				}
+			}
+		}
+
+		private static async Task CreateDefaultAdmin(IServiceProvider provider)
+		{
+			const string email = "g@email.com";
+			const string username = "administrator";
+			const string password = "Programming";
+
+			var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
+
+			// Check if there are any users in database
+			if(userManager.Users.Count() == 0)
+			{
+				IdentityUser admin = new IdentityUser()
+				{
+					Email = email,
+					UserName = username
+				};
+
+				//Create admin
+				await userManager.CreateAsync(admin, password);
+
+				// Add to admin
+				await userManager.AddToRoleAsync(admin, "Admin");
 			}
 		}
 	}
