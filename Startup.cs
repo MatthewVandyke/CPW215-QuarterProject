@@ -12,6 +12,7 @@ using CPW215_QuarterProject.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using CPW215_QuarterProject.Models;
 
 namespace CPW215_QuarterProject
 {
@@ -30,7 +31,7 @@ namespace CPW215_QuarterProject
 			services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(
 					Configuration.GetConnectionString("DefaultConnection")));
-			services.AddDefaultIdentity<IdentityUser>(SetIdentityOptions)
+			services.AddDefaultIdentity<IdentityUser>(IdentityHelper.SetIdentityOptions)
 				.AddRoles<IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			services.AddControllersWithViews();
@@ -71,61 +72,8 @@ namespace CPW215_QuarterProject
 			// Create roles here
 			IServiceScope serviceProvider = app.ApplicationServices
 									.GetRequiredService<IServiceProvider>().CreateScope();
-			CreateRoles(serviceProvider.ServiceProvider, "Admin", "Seller", "RegUser").Wait();
-			CreateDefaultAdmin(serviceProvider.ServiceProvider).Wait();
-		}
-
-		private static void SetIdentityOptions(IdentityOptions options)
-		{
-			// Sign in options
-			options.SignIn.RequireConfirmedEmail = false;
-
-			// Password strength
-			options.Password.RequiredLength = 8;
-
-			// Lockout options
-			options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-			options.Lockout.MaxFailedAccessAttempts = 5;
-		}
-
-		private static async Task CreateRoles(IServiceProvider provider, params string[] roles)
-		{
-			RoleManager<IdentityRole> roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
-
-			// Create role if it does not exist
-			foreach (string role in roles)
-			{
-				bool doesRoleExist = await roleManager.RoleExistsAsync(role);
-				if (!doesRoleExist)
-				{
-					await roleManager.CreateAsync(new IdentityRole(role));
-				}
-			}
-		}
-
-		private static async Task CreateDefaultAdmin(IServiceProvider provider)
-		{
-			const string email = "g@email.com";
-			const string username = "admin";
-			const string password = "Programming02*";
-
-			var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
-
-			// Check if there are any users in database
-			if(userManager.Users.Count() == 0)
-			{
-				IdentityUser admin = new IdentityUser()
-				{
-					Email = email,
-					UserName = username
-				};
-
-				//Create admin
-				await userManager.CreateAsync(admin, password);
-
-				// Add to admin
-				await userManager.AddToRoleAsync(admin, "Admin");
-			}
+			IdentityHelper.CreateRoles(serviceProvider.ServiceProvider, "Admin", "Seller", "RegUser").Wait();
+			IdentityHelper.CreateDefaultAdmin(serviceProvider.ServiceProvider).Wait();
 		}
 	}
 }
