@@ -106,8 +106,8 @@ namespace CPW215_QuarterProject
 		private static async Task CreateDefaultAdmin(IServiceProvider provider)
 		{
 			const string email = "g@email.com";
-			const string username = "administrator";
-			const string password = "Programming";
+			const string username = "admin";
+			const string password = "Programming02*";
 
 			var userManager = provider.GetRequiredService<UserManager<IdentityUser>>();
 
