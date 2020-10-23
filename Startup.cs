@@ -13,6 +13,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CPW215_QuarterProject.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using WebPWrecover.Services;
+using CPW215_QuarterProject.Services;
 
 namespace CPW215_QuarterProject
 {
@@ -35,6 +38,8 @@ namespace CPW215_QuarterProject
 				.AddRoles<IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			services.AddControllersWithViews();
+			services.AddTransient<IEmailSender, EmailSender>();
+			services.Configure<AuthMessageSenderOptions>(Configuration);
 			services.AddRazorPages();
 		}
 
