@@ -27,7 +27,7 @@ namespace CPW215_QuarterProject.Models
 		public string Description { get; set; }
 	}
 
-	public enum BookType
+	public enum BookFormat
 	{
 		Hardcover,
 		Paperback
@@ -41,10 +41,36 @@ namespace CPW215_QuarterProject.Models
 		public string ISBN { get; set; }
 
 		[Required]
+		[StringLength(50)]
 		[Display(Name = "Author's Full Name")]
 		public string AuthorFullName { get; set; }
 
+		[StringLength(50)]
+		public string Publisher { get; set; }
+
 		[Required]
-		public BookType BookType { get; set; }
+		public BookFormat BookFormat { get; set; }
+	}
+
+	public enum GameRating
+	{
+		Mature,
+		Teen,
+		Everyone
+	}
+
+	public class VideoGame : Item
+	{
+		public string Publisher { get; set; }
+
+		[Required]
+		public string Developer { get; set; }
+
+		[Required]
+		public GameRating GameRating { get; set; }
+
+		[DataType(DataType.Date)]
+		[Required]
+		public DateTime ReleaseDate { get; set; }
 	}
 }
