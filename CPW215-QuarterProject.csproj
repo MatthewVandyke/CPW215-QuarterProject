@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20201028024109_inheritanceBasicModel.cs" />
+    <Compile Remove="Data\Migrations\20201028024109_inheritanceBasicModel.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201028024751_InheritanceBasicModel.cs" />
+    <Compile Remove="Data\Migrations\20201028024751_InheritanceBasicModel.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201028030246_InheritanceModelBasic.cs" />
+    <Compile Remove="Data\Migrations\20201028030246_InheritanceModelBasic.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.8" />
