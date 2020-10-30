@@ -13,6 +13,7 @@ namespace CPW215_QuarterProject.Models
 		{
 			// Sign in options
 			options.SignIn.RequireConfirmedEmail = false;
+			options.SignIn.RequireConfirmedAccount = true;
 
 			// Password strength
 			options.Password.RequiredLength = 8;
