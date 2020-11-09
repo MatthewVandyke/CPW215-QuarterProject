@@ -43,78 +43,55 @@ namespace CPW215_QuarterProject.Controllers
             return View(item);
         }
 
-        // GET: Items/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Items/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemId,ItemType,Name,Price,Description")] Item item)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(item);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(item);
-        }
-
-        // GET: Items/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        // GET: Items/AddOrEdit(Insert)
+        // GET: Items/AddOrEdit/5(Update)
+        public async Task<IActionResult> AddOrEdit(string id = null)
         {
             if (id == null)
+                return View(new Item());
+            else
             {
-                return NotFound();
+                var itemModel = await _context.Items.FindAsync(id);
+                if (itemModel == null)
+                {
+                    return NotFound();
+                }
+                return View(itemModel);
             }
-
-            var item = await _context.Items.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
         }
 
-        // POST: Items/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ItemId,ItemType,Name,Price,Description")] Item item)
-        {
-            if (id != item.ItemId)
-            {
-                return NotFound();
-            }
-
+        public async Task<IActionResult> AddOrEdit(string id, Item item)
+		{
             if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(item);
+			{
+                //Insert
+                if (id == null)
+				{
+                    await _context.Items.AddAsync(item);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ItemExists(item.ItemId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(item);
-        }
+				}
+				//Update
+				else
+				{
+					try
+					{
+                        _context.Items.Update(item);
+                        await _context.SaveChangesAsync();
+					}
+                    catch (DbUpdateConcurrencyException)
+					{
+                        if (!ItemExists(item.ItemId))
+						{ return NotFound(); }
+						else
+						{ throw; }
+					}
+				}
+                return Json(new { isValid = true, html = HtmlHelper.RenderRazorViewToString(this, "_ViewAll", _context.Items.ToList()) });
+			}
+            return Json(new { isValid = false, html = HtmlHelper.RenderRazorViewToString(this, "AddOrEdit", item) });
+		}
 
         // GET: Items/Delete/5
         public async Task<IActionResult> Delete(string id)
