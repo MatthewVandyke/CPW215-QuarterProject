@@ -22,9 +22,9 @@ namespace CPW215_QuarterProject.Data
 
 			builder.Entity<Item>()
 				.HasDiscriminator(item => item.ItemType)
-				.HasValue<Item>("item_base")
-				.HasValue<Book>("item_book")
-				.HasValue<VideoGame>("item_videogame");
+				.HasValue<Item>(nameof(Item))
+				.HasValue<Book>(nameof(Book))
+				.HasValue<VideoGame>(nameof(VideoGame));
 
 			builder.Entity<Item>()
 				.Property(item => item.ItemType)
