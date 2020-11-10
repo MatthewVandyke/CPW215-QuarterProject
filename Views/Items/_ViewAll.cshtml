@@ -30,7 +30,10 @@
 					@Html.DisplayFor(sellItem => item.Name)
 				</td>
 				<td>
-					@Html.DisplayFor(sellItem => item.Seller)
+					@{ 
+						if (item.Seller != null)
+							Html.DisplayFor(sellItem => item.Seller.UserName);
+					}
 				</td>
 				<td>
 					@Html.DisplayFor(sellItem => item.Price)
