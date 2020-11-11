@@ -21,6 +21,8 @@ namespace CPW215_QuarterProject
 {
 	public class Startup
 	{
+		private string _EmailApiKey;
+
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -31,6 +33,10 @@ namespace CPW215_QuarterProject
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			_EmailApiKey = Configuration["Email:SendGridKey"];
+			var emailConfig = Configuration.GetSection("Email")
+								.Get<AuthMessageSenderOptions>();
+			_EmailApiKey = emailConfig.SendGridKey;
 			services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(
 					Configuration.GetConnectionString("DefaultConnection")));
