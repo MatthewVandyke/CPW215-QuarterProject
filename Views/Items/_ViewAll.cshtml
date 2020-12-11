@@ -43,7 +43,7 @@
 				</td>
 				<td>
 					<div>
-						<a onclick="showInPopup('@Url.Action("AddOrEdit","Item",new { id = item.ItemId },Context.Request.Scheme)','Update Item')" class="btn btn-info text-white">Edit</a>
+						<a onclick="showInPopup('@Url.Action("AddOrEdit","Items",new { id = item.ItemId },Context.Request.Scheme)','Update Item')" class="btn btn-info text-white">Edit</a>
 						<form asp-action="Delete" asp-route-id="@item.ItemId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
 							<input type="submit" value="Delete" class="btn btn-danger" />
 						</form>
