@@ -15,21 +15,5 @@ namespace CPW215_QuarterProject.Data
 		{
 		}
 		public virtual DbSet<Item> Items { get; set; }
-
-		protected override void OnModelCreating(ModelBuilder builder)
-		{
-			base.OnModelCreating(builder);
-
-			builder.Entity<Item>()
-				.HasDiscriminator(item => item.ItemType)
-				.HasValue<Item>(nameof(Item))
-				.HasValue<Book>(nameof(Book))
-				.HasValue<VideoGame>(nameof(VideoGame));
-
-			builder.Entity<Item>()
-				.Property(item => item.ItemType)
-				.HasMaxLength(200)
-				.HasColumnName("item_type");
-		}
 	}
 }
