@@ -52,7 +52,8 @@ namespace CPW215_QuarterProject.Models
 				IdentityUser admin = new IdentityUser()
 				{
 					Email = email,
-					UserName = username
+					UserName = username,
+					EmailConfirmed = true
 				};
 
 				//Create admin
