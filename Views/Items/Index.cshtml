@@ -1,0 +1,13 @@
+﻿@model IEnumerable<CPW215_QuarterProject.Models.Item>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div id="view-all">
+    @await Html.PartialAsync("_ViewAll", Model) 
+</div>
+
+@section Scripts{ 
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
