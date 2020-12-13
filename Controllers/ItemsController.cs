@@ -72,6 +72,7 @@ namespace CPW215_QuarterProject.Controllers
                 //Insert
                 if (id == null)
 				{
+                    item.Seller = await _userManager.GetUserAsync(HttpContext.User);
                     await _context.Items.AddAsync(item);
                     await _context.SaveChangesAsync();
 				}
